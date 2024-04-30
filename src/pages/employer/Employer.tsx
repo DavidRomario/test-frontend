@@ -1,7 +1,12 @@
-import React from 'react'
+import Header from "../../components/header/Header"
+import Footer from "../../components/footer/Footer"
 
 export default function Employer() {
   return (
-    <div>Employer</div>
+    <>
+    <Header/>
+    <div>oi</div>
+    <Footer/>
+    </>
   )
 }
