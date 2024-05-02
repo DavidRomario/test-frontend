@@ -13,7 +13,7 @@ export const Container = styled.div`
 width: 80%;
 height: 80vh;
 display: flex;
-box-shadow: 5px 5px 10px rgba(0, 0, 0, .212);
+box-shadow: 5px 10px 10px rgba(0, 0, 0, .212);
 align-items: center;
 
 @media (max-width: 1330px) {
@@ -39,7 +39,7 @@ width: 80%;
 
 `
 
-export const Form = styled.div`
+export const Form = styled.form`
 width: 50%;
 display: flex;
 justify-content: center;
