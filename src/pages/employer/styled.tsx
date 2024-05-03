@@ -68,3 +68,7 @@ export const UserInfo = styled.div`
     display: flex;
     flex-direction: column;
 `
+export const Switch = styled.div`
+    display: flex;
+    align-items: center;
+`

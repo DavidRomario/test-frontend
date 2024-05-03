@@ -5,7 +5,8 @@ import pic from "../../assets/pic.svg"
 import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import Alert from '@mui/material/Alert'
-import CurrencyInput from "react-currency-input-field"
+import { Switch } from '@mui/material'
+
 
 interface Address {
   logradouro: string;
@@ -28,13 +29,16 @@ interface FormData {
   preco: string;
   imagem: string | null;
   consulta: "presencial" | "online";
+  ativo: any;
 }
+
 
 export default function Register() {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const [alertType, setAlertType] = useState<"success" | "error" | null>(null);
   const [consulta, setConsulta] = useState<"presencial" | "online">(params.get("consulta") === "presencial" ? "presencial" : "online");
+  const [ativo, setAtivo] = useState<boolean>(params.get("ativo") === "true");
 
   const [formData, setFormData] = useState<FormData>({
     nome: params.get("nome") || "",
@@ -52,8 +56,9 @@ export default function Register() {
       numero: params.get("numero") || "",
     },
     preco: params.get("preco") || "",
-    imagem: params.get("imagem") || null,
+    imagem: null,
     consulta: params.get("consulta") === "presencial" ? "presencial" : "online",
+    ativo: params.get("ativo") || true
   });
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
@@ -87,19 +92,24 @@ export default function Register() {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        if (e.target && typeof e.target.result === "string") {
-          setFormData((prev) => ({ ...prev, imagem: e.target.result }));
-        }
-      };
-      reader.readAsDataURL(e.target.files[0]);
+      const file = e.target.files[0];
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          if (e.target && typeof e.target.result === "string") {
+            setFormData((prev) => ({ ...prev, imagem: e.target.result }));
+          }
+        };
+        reader.readAsDataURL(file);
+      } else {
+        console.error("Invalid file format. Please select an image file.");
+      }
     }
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { nome, email, telefone, cpf, cfm, date, address, preco, imagem, consulta } = formData;
+    const { nome, email, telefone, cpf, cfm, date, address, preco, consulta, ativo } = formData;
     setAlertType("success");
     if (!validarCpf(cpf)) {
       setAlertType("error");
@@ -112,7 +122,10 @@ export default function Register() {
       setAlertMessage("CPF já cadastrado!");
       return;
     }
-    const newFormData: FormData = { nome, email, telefone, cpf, cfm, date, address, preco, imagem, consulta };
+
+    const novaImagem = formData.imagem !== null ? formData.imagem : JSON.parse(localStorage.getItem(cpf) || "{}").imagem || null;
+
+    const newFormData: FormData = { nome, email, telefone, cpf, cfm, date, address, preco, imagem: novaImagem, consulta, ativo };
     localStorage.setItem(cpf, JSON.stringify(newFormData));
     setAlertMessage(params.get("isEditing") ? "Usuário atualizado com sucesso!" : "Cadastro inserido com sucesso!");
     setFormData({
@@ -133,10 +146,13 @@ export default function Register() {
       preco: "",
       imagem: null,
       consulta: "presencial",
+      ativo: true,
     });
+    window.location.href = "/funcionarios";
   };
 
   const handleCloseAlert = () => {
+    setAlertType(null);
     setAlertMessage(null);
   };
 
@@ -244,8 +260,21 @@ function validarCpf(cpf: string): boolean {
               </S.InputBox>
               <S.InputBox>
                 <S.Label>Imagem</S.Label>
-                {formData.imagem && <S.Image width="40px" height="40px" src={formData.imagem} alt="Imagem selecionada" />}
-                <S.Input type="file" name="imagem" onChange={handleImageChange} accept="image/*" required />
+                {!params.get("isEditing") && formData.imagem && <S.Image width="40px" height="40px" src={formData.imagem} alt="Imagem selecionada" />}
+                <S.Input type="file" name="imagem" onChange={handleImageChange} accept="image/*" />
+              </S.InputBox>
+              <S.InputBox>
+              <S.Label>Usuário {ativo ? 'ativado' : 'desativado'}</S.Label>
+                <div>
+                  <span>Desativado</span>
+                  <Switch
+                    checked={ativo}
+                    onChange={(e) => setAtivo(e.target.checked)}
+                    color="primary"
+                    inputProps={{ 'aria-label': 'controlled' }}
+                  />
+                  <span>Ativado</span>
+              </div>
               </S.InputBox>
             </S.InputGroup>
             <S.GenderInput>
