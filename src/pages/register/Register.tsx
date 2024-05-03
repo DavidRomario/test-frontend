@@ -4,6 +4,8 @@ import * as S from "./styled"
 import pic from "../../assets/pic.svg"
 import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
+import Alert from '@mui/material/Alert'
+import CurrencyInput from "react-currency-input-field"
 
 interface Address {
   logradouro: string;
@@ -31,6 +33,8 @@ interface FormData {
 export default function Register() {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
+  const [alertType, setAlertType] = useState<"success" | "error" | null>(null);
+  const [consulta, setConsulta] = useState<"presencial" | "online">(params.get("consulta") === "presencial" ? "presencial" : "online");
 
   const [formData, setFormData] = useState<FormData>({
     nome: params.get("nome") || "",
@@ -51,13 +55,17 @@ export default function Register() {
     imagem: params.get("imagem") || null,
     consulta: params.get("consulta") === "presencial" ? "presencial" : "online",
   });
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
-    useEffect(() => {
+  useEffect(() => {
     if (params.get("consulta") && params.get("consulta") !== formData.consulta) {
       setFormData((prev) => ({ ...prev, consulta: params.get("consulta") === "presencial" ? "presencial" : "online" }));
     }
   }, [params, formData.consulta]);
 
+  const handleConsultaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setConsulta(e.target.value as "presencial" | "online");
+  };
 
   const handleCepChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const cep = e.target.value.replace(/[^\d-]/g, "");
@@ -92,13 +100,21 @@ export default function Register() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { nome, email, telefone, cpf, cfm, date, address, preco, imagem, consulta } = formData;
+    setAlertType("success");
+    if (!validarCpf(cpf)) {
+      setAlertType("error");
+      setAlertMessage("CPF inválido!");
+      return;
+    }
+
     if (localStorage.getItem(cpf) && !params.get("isEditing")) {
-      alert("CPF já cadastrado!");
-    return;
-  }
+      setAlertType("error");
+      setAlertMessage("CPF já cadastrado!");
+      return;
+    }
     const newFormData: FormData = { nome, email, telefone, cpf, cfm, date, address, preco, imagem, consulta };
     localStorage.setItem(cpf, JSON.stringify(newFormData));
-    params.get("isEditing") ? alert("Usuário atualizado com sucesso!") : alert("Cadastro inserido com sucesso!")
+    setAlertMessage(params.get("isEditing") ? "Usuário atualizado com sucesso!" : "Cadastro inserido com sucesso!");
     setFormData({
       nome: "",
       email: "",
@@ -120,6 +136,43 @@ export default function Register() {
     });
   };
 
+  const handleCloseAlert = () => {
+    setAlertMessage(null);
+  };
+
+function validarCpf(cpf: string): boolean {
+  cpf = cpf.replace(/\D/g, '');
+
+  if (cpf.length !== 11) {
+    return false;
+  }
+
+  let soma = 0;
+  for (let i = 0; i < 9; i++) {
+    soma += parseInt(cpf.charAt(i)) * (10 - i);
+  }
+  let resto = soma % 11;
+  let digitoVerificador1 = resto < 2 ? 0 : 11 - resto;
+
+  if (parseInt(cpf.charAt(9)) !== digitoVerificador1) {
+    return false;
+  }
+
+  soma = 0;
+  for (let i = 0; i < 10; i++) {
+    soma += parseInt(cpf.charAt(i)) * (11 - i);
+  }
+  resto = soma % 11;
+  let digitoVerificador2 = resto < 2 ? 0 : 11 - resto;
+
+  if (parseInt(cpf.charAt(10)) !== digitoVerificador2) {
+    return false;
+  }
+
+  return true;
+}
+
+
   return (
     <>
       <Header />
@@ -130,7 +183,7 @@ export default function Register() {
           </S.ContainerImage>
           <S.Form onSubmit={handleSubmit} action="#">
             <S.FormHeader>
-              <h1>Cadastre-se</h1>
+              <h1>Registro de profissional</h1>
             </S.FormHeader>
             <S.InputGroup>
               <S.InputBox>
@@ -143,15 +196,15 @@ export default function Register() {
               </S.InputBox>
               <S.InputBox>
                 <S.Label>Telefone</S.Label>
-                <S.Input type="tel" name="telefone" placeholder="(xx) xxxxx-xxxx" value={formData.telefone} onChange={(e) => setFormData({ ...formData, telefone: e.target.value })} required />
+                <S.Input type="tel" maxLength={11} name="telefone" placeholder="(xx) xxxxx-xxxx" value={formData.telefone} onChange={(e) => setFormData({ ...formData, telefone: e.target.value })} required />
               </S.InputBox>
               <S.InputBox>
                 <S.Label>CPF</S.Label>
-                <S.Input type="text" name="cpf" placeholder="xxx.xxx.xxx-xx" value={formData.cpf} onChange={(e) => setFormData({ ...formData, cpf: e.target.value })} required />
+                <S.Input type="text" maxLength={11} name="cpf" placeholder="xxx.xxx.xxx-xx" value={formData.cpf} onChange={(e) => setFormData({ ...formData, cpf: e.target.value })} required />
               </S.InputBox>
               <S.InputBox>
                 <S.Label>Registro CFM</S.Label>
-                <S.Input type="text" name="cfm" placeholder="0000000/UF" value={formData.cfm} onChange={(e) => setFormData({ ...formData, cfm: e.target.value })} required />
+                <S.Input type="text" maxLength={10} name="cfm" placeholder="0000000/UF" value={formData.cfm} onChange={(e) => setFormData({ ...formData, cfm: e.target.value })} required />
               </S.InputBox>
               <S.InputBox>
                 <S.Label>Data de Nascimento</S.Label>
@@ -187,11 +240,11 @@ export default function Register() {
               </S.InputBox>
               <S.InputBox>
                 <S.Label>Valor da consulta</S.Label>
-                <S.Input type="number" name="preco" value={formData.preco} onChange={(e) => setFormData({ ...formData, preco: e.target.value })} required />
+                 <S.Input type="number" name="preco" value={formData.preco} onChange={(e) => setFormData({ ...formData, preco: e.target.value })} required />
               </S.InputBox>
               <S.InputBox>
                 <S.Label>Imagem</S.Label>
-                {formData.imagem && <img width="40px" height="40px" src={formData.imagem} alt="Imagem selecionada" />}
+                {formData.imagem && <S.Image width="40px" height="40px" src={formData.imagem} alt="Imagem selecionada" />}
                 <S.Input type="file" name="imagem" onChange={handleImageChange} accept="image/*" required />
               </S.InputBox>
             </S.InputGroup>
@@ -201,17 +254,19 @@ export default function Register() {
               </S.Title>
               <S.GenderGroup>
                 <div>
-                  <input type="radio" />
+                  <input type="radio" name="consulta" value="presencial" checked={consulta === "presencial"} onChange={handleConsultaChange} />
                   <label>Presencial</label>
                 </div>
                 <div>
-                  <input type="radio" />
+                  <input type="radio" name="consulta" value="online" checked={consulta === "online"} onChange={handleConsultaChange} />
                   <label>Online</label>
                 </div>
               </S.GenderGroup>
             </S.GenderInput>
+            {alertType === "success" && <Alert severity="success" variant="filled" onClose={handleCloseAlert}>{alertMessage}</Alert>}
+            {alertType === "error" && <Alert severity="error" onClose={handleCloseAlert}>{alertMessage}</Alert>}
             <S.ContainerButton>
-              <button type="submit">Cadastro</button>
+              <button type="submit">Enviar informações</button>
             </S.ContainerButton>
           </S.Form>
         </S.Container>
