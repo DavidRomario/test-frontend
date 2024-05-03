@@ -5,8 +5,6 @@ import pic from "../../assets/pic.svg"
 import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import Alert from '@mui/material/Alert'
-import { Switch } from '@mui/material'
-
 
 interface Address {
   logradouro: string;
@@ -38,7 +36,6 @@ export default function Register() {
   const params = new URLSearchParams(location.search);
   const [alertType, setAlertType] = useState<"success" | "error" | null>(null);
   const [consulta, setConsulta] = useState<"presencial" | "online">(params.get("consulta") === "presencial" ? "presencial" : "online");
-  const [ativo, setAtivo] = useState<boolean>(params.get("ativo") === "true");
 
   const [formData, setFormData] = useState<FormData>({
     nome: params.get("nome") || "",
@@ -58,7 +55,7 @@ export default function Register() {
     preco: params.get("preco") || "",
     imagem: null,
     consulta: params.get("consulta") === "presencial" ? "presencial" : "online",
-    ativo: params.get("ativo") || true
+    ativo: params.get("ativo")
   });
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
@@ -70,6 +67,14 @@ export default function Register() {
 
   const handleConsultaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setConsulta(e.target.value as "presencial" | "online");
+  };
+
+    const handleDateChange = (e) => {
+    const value = e.target.value;
+    const formattedDate = value
+      .replace(/\D/g, '') // Remove caracteres não numéricos
+      .slice(0, 8); // Limita a 8 caracteres
+    setFormData({ ...formData, date: formattedDate });
   };
 
   const handleCepChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -146,7 +151,7 @@ export default function Register() {
       preco: "",
       imagem: null,
       consulta: "presencial",
-      ativo: true,
+      ativo: "",
     });
     window.location.href = "/funcionarios";
   };
@@ -224,7 +229,7 @@ function validarCpf(cpf: string): boolean {
               </S.InputBox>
               <S.InputBox>
                 <S.Label>Data de Nascimento</S.Label>
-                <S.Input type="date" name="date" placeholder="0000000/UF" value={formData.date} onChange={(e) => setFormData({ ...formData, date: e.target.value })} required />
+                <S.Input type="date" name="date" value={formData.date} onChange={(e) => setFormData({ ...formData, date: e.target.value })} required />
               </S.InputBox>
               <S.InputBox>
                 <S.Label>CEP</S.Label>
@@ -262,19 +267,6 @@ function validarCpf(cpf: string): boolean {
                 <S.Label>Imagem</S.Label>
                 {!params.get("isEditing") && formData.imagem && <S.Image width="40px" height="40px" src={formData.imagem} alt="Imagem selecionada" />}
                 <S.Input type="file" name="imagem" onChange={handleImageChange} accept="image/*" />
-              </S.InputBox>
-              <S.InputBox>
-              <S.Label>Usuário {ativo ? 'ativado' : 'desativado'}</S.Label>
-                <div>
-                  <span>Desativado</span>
-                  <Switch
-                    checked={ativo}
-                    onChange={(e) => setAtivo(e.target.checked)}
-                    color="primary"
-                    inputProps={{ 'aria-label': 'controlled' }}
-                  />
-                  <span>Ativado</span>
-              </div>
               </S.InputBox>
             </S.InputGroup>
             <S.GenderInput>

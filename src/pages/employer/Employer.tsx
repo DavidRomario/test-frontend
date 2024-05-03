@@ -80,7 +80,7 @@ export default function Employer() {
                 </S.UserInfo>
               </S.ContainerList>
               <S.ContainerBtn>
-                <Link to={`/?nome=${user.nome}&email=${user.email}&telefone=${user.telefone}&cpf=${user.cpf}&cfm=${user.cfm}&date=${user.date}&logradouro=${user.address.logradouro}&bairro=${user.address.bairro}&cidade=${user.address.cidade}&uf=${user.address.uf}&complemento=${user.address.complemento}&cep=${user.address.cep}&numero=${user.address.numero}&preco=${user.preco}&imagem=${user.imagem}&consulta=${user.consulta}&ativo=${user.ativo}&isEditing=true`}>
+                <Link to={`/?nome=${user.nome}&ativo=${userStatus[user.cpf]}&email=${user.email}&telefone=${user.telefone}&cpf=${user.cpf}&cfm=${user.cfm}&date=${user.date}&logradouro=${user.address.logradouro}&bairro=${user.address.bairro}&cidade=${user.address.cidade}&uf=${user.address.uf}&complemento=${user.address.complemento}&cep=${user.address.cep}&numero=${user.address.numero}&preco=${user.preco}&imagem=${user.imagem}&consulta=${user.consulta}&isEditing=true`}>
                   <S.Button>Editar</S.Button>
                 </Link>
                 <S.Button onClick={() => handleClickOpen(user.cpf)}>Excluir</S.Button>

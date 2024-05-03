@@ -1,30 +1,32 @@
-# React + TypeScript + Vite
+# Teste NVSTEC
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Inicializar o projeto
 
-Currently, two official plugins are available:
+- Para inicializar, clone o repositorio com o comando abaixo em seu terminal
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+  ```
+  git clone https://github.com/DavidRomario/test-frontend.git
+  ```
 
-## Expanding the ESLint configuration
+- Instale as dependências:
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+  ```
+  cd test-frontend
+  npm install
+  ```
 
-- Configure the top-level `parserOptions` property like this:
+  - Rode o seguinte comando:
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+  ```
+    npm run dev
+  ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+# Tecnologias utilizadas
+
+- React
+- TypeScript
+- Styled Components: Biblioteca para estilização de componentes com CSS-in-JS.
+
+# O Desafio
+
+Este projeto consiste no desenvolvimento da área interna de uma plataforma online para contratação de profissionais de saúde. A plataforma já conta com uma seção pública onde os profissionais podem se cadastrar, e agora será criada uma interface de administração para gerenciar todos os cadastros.
