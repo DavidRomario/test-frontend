@@ -8,7 +8,7 @@ export const ContainerForm = styled.div `
     width: 80%;
     height: auto;
     margin: 15px auto;
-    padding: 3rem;
+    padding: 48px;
     background-color: #CCCCFF;
     border-radius: 10px;
     box-shadow: 2px 2px 10px 2px rgba( 0.5, 0.5, 0.5, 0.5);
@@ -21,15 +21,15 @@ export const Title = styled.div `
 export const Lista = styled.div `
     display: flex;
     justify-content: space-around;
-    margin-top: 1rem;
-    padding: 1rem;
+    margin-top: 16px;
+    padding: 16px;
     background-color: #f2f5ff;
     border-radius: 20px;
     `
 
 export const ContainerList = styled.div `
     display: flex;
-    padding: 1rem;
+    padding: 16px;
     width: 85%;
 
     `
@@ -38,7 +38,7 @@ export const ContainerBtn = styled.div `
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    padding: 1rem;
+    padding: 16px;
     width: 15%
     `
 
@@ -55,12 +55,13 @@ export const Button = styled.button `
     padding: 6px;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 16px;
     font-weight: 500;
     color: #fff;;
     `
 export const Span = styled.span `
     margin: 5px 0;
+    font-size: 20px;
     `
 
 export const UserInfo = styled.div`
@@ -71,4 +72,5 @@ export const UserInfo = styled.div`
 export const Switch = styled.div`
     display: flex;
     align-items: center;
+    font-size: 20px;
 `

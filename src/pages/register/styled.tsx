@@ -16,7 +16,7 @@ export const Container = styled.div`
   box-shadow: 5px 10px 10px rgba(0, 0, 0, .212);
   align-items: center;
   background: #e0d0ff;
-  margin: 5rem;
+  margin: 80px;
   border-radius: 10px;
 
 `
@@ -27,7 +27,7 @@ export const ContainerImage = styled.div`
   justify-content: center;
   align-items: center;
   background-color: #e0d0ff;
-  padding: 1rem;
+  padding: 16px;
 
 `
 
@@ -43,7 +43,7 @@ export const Form = styled.form`
   align-items: center;
   flex-direction: column;
   background-color: #fff;
-  padding: 1rem;
+  padding: 16px;
   border-radius: 0 10px 10px 0;
 
   @media (max-width: 1200px) {
@@ -53,7 +53,7 @@ export const Form = styled.form`
 `
 
 export const FormHeader = styled.div`
-  margin-bottom: 3rem
+  margin-bottom: 48px;
 `
 
 export const InputGroup = styled.div`
@@ -64,12 +64,12 @@ export const InputGroup = styled.div`
 export const InputBox = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.1rem;
+  margin-bottom: 18px;;
 `
 
 export const Input = styled.input`
-  margin: 0.6rem 0;
-  padding: 0.8rem 1.2rem;
+  margin: 10px; 0;
+  padding: 13px 19px;
   border: none;
   border-radius: 10px;
   box-shadow: 1px 1px 6px #0000001c;
@@ -78,31 +78,16 @@ export const Input = styled.input`
       background-color: #eeeee7;
     }
 `
-export const CurrencyInput = styled(Input)`
-margin: 0.6rem 0;
-  padding: 0.8rem 1.2rem;
-  border: none;
-  border-radius: 10px;
-  box-shadow: 1px 1px 6px #0000001c;
-  min-width: 207px;
-  &:hover {
-      background-color: #eeeee7;
-    }
-
-    @media (max-width: 1200px) {
-    width: 50%; 
-}
-`;
 
 export const Label = styled.label`
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: 600;
   color: #000000c0;
 `
 
 export const Title = styled.div`
   & h6 {
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: 600;
   color: #000000c0;
     }
@@ -127,13 +112,13 @@ export const GenderInput = styled.div`
 export const ContainerButton = styled.div`
 & button {
   width: 100%;
-  margin-top: 3rem;
+  margin-top: 48px;
   border: none;
   background-color: #6c63ff;
-  padding: 1rem;
+  padding: 16px;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: 500;
   color: #fff;
 

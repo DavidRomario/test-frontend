@@ -34,10 +34,6 @@ flex-decoration: none;
 a{
 text-decoration: none;
 }
-@media (max-width: 500px) {
-flex-direction: row;
-padding-left: 20px;  
-}
 `
 
 export const Text = styled.p`
@@ -55,9 +51,6 @@ a{
 color: #FFFFFF;  
 text-decoration: none;
 font-size: 20px;
-}
-@media (max-width: 500px) {
-height: 5vh;
 }
 `
 

@@ -26,7 +26,7 @@ interface FormData {
   address: Address;
   preco: string;
   imagem: string | null;
-  consulta: "presencial" | "online";
+  consulta: string;
   ativo: any;
 }
 
@@ -36,7 +36,7 @@ export default function Register() {
   const params = new URLSearchParams(location.search);
   const [alertType, setAlertType] = useState<"success" | "error" | null>(null);
   const [consulta, setConsulta] = useState<"presencial" | "online">(params.get("consulta") === "presencial" ? "presencial" : "online");
-
+  
   const [formData, setFormData] = useState<FormData>({
     nome: params.get("nome") || "",
     email: params.get("email") || "",
@@ -54,27 +54,17 @@ export default function Register() {
     },
     preco: params.get("preco") || "",
     imagem: null,
-    consulta: params.get("consulta") === "presencial" ? "presencial" : "online",
-    ativo: params.get("ativo")
+    consulta: consulta,
+    ativo: params.get("ativo") === "true"
   });
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    if (params.get("consulta") && params.get("consulta") !== formData.consulta) {
-      setFormData((prev) => ({ ...prev, consulta: params.get("consulta") === "presencial" ? "presencial" : "online" }));
-    }
-  }, [params, formData.consulta]);
+    setConsulta(params.get("consulta") === "presencial" ? "presencial" : "online");
+  }, [params.get("consulta")]);
 
   const handleConsultaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setConsulta(e.target.value as "presencial" | "online");
-  };
-
-    const handleDateChange = (e) => {
-    const value = e.target.value;
-    const formattedDate = value
-      .replace(/\D/g, '') // Remove caracteres não numéricos
-      .slice(0, 8); // Limita a 8 caracteres
-    setFormData({ ...formData, date: formattedDate });
   };
 
   const handleCepChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -150,7 +140,7 @@ export default function Register() {
       },
       preco: "",
       imagem: null,
-      consulta: "presencial",
+      consulta: "",
       ativo: "",
     });
     window.location.href = "/funcionarios";
